@@ -39,6 +39,12 @@ export default function TicTacToe() {
     }
   };
 
+  const restartGame = () => {
+    setBoard(Array(9).fill(null));
+    setXIsNext(true);
+    setWinner(null);
+  };
+
   const handleClick = (index) => {
     if (board[index] || winner) return;
     const newBoard = [...board];
@@ -52,12 +58,20 @@ export default function TicTacToe() {
     <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
       <div className="flex flex-col items-center gap-4 p-4">
         {!gameStarted ? (
-          <Button onClick={startGame} variant="primary">
-            Play
-          </Button>
+          <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: '100vh' }}>
+            <p className="text-lg font-bold mb-4" style={{ marginBottom: '20px' }}>
+              Welcome to Tic Tac Toe!
+            </p>
+            <Button onClick={startGame} variant="primary">
+              Play
+            </Button>
+          </div>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            {/* Apply CSS Grid for the 3x3 layout */}
+            <p className="text-lg font-bold" style={{ marginBottom: '20px' }}>
+              {winner ? 'Game Over!' : `${xIsNext ? "X's" : "O's"} Turn`}
+            </p>
+
             <div className="board" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 100px)', gap: '5px' }}>
               {board.map((cell, index) => (
                 <Card
@@ -79,13 +93,20 @@ export default function TicTacToe() {
                 </Card>
               ))}
             </div>
+
             {winner && (
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-2" style={{ marginTop: '20px' }}>
                 <p className="text-lg font-bold">{winner === 'Draw' ? "It's a Draw!" : `${winner} Wins!`}</p>
-                <Button onClick={startGame} variant="success">
+                <Button onClick={restartGame} variant="success" style={{ width: '200px', justifyContent: 'center' }}>
                   Restart
                 </Button>
               </div>
+            )}
+
+            {!winner && (
+              <Button onClick={restartGame} variant="warning" style={{ width: '200px', justifyContent: 'center', marginTop: '20px' }}>
+                Restart Game
+              </Button>
             )}
           </div>
         )}
